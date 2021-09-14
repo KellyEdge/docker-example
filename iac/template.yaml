@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 
-Description: Hosts a docker container (web app) in Amazon ECS on an EC2 host
+Description: Hosts a docker container (web app) in Amazon ECS on an EC2 host...
 
 Parameters:
 
