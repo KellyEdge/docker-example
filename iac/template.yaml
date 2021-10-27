@@ -25,30 +25,41 @@ Parameters:
   KeyPairName:
     Type: String
 
+  LaunchConfigurationName:
+    Type: String
+
 Resources:
 
   # EC2 Instance Configuration
 
-  myEC2Instance:
-    Type: AWS::EC2::Instance
+  myLaunchConfiguration:
+    Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
+      LaunchConfigurationName: !Ref LaunchConfigurationName
       InstanceType: !Ref EC2InstanceType
       ImageId: !Ref EC2ImageId
       KeyName: !Ref KeyPairName
       IamInstanceProfile: !Ref myInstanceProfile
-      SecurityGroupIds:
+      SecurityGroups:
         - !Ref myEC2SecurityGroup
-      Tags:
-        - Key: Name
-          Value: Kellys EC2
       UserData:
         'Fn::Base64':
           !Sub |
           #!/bin/bash -x
           echo ECS_CLUSTER=${ClusterName} >> /etc/ecs/ecs.config
 
+  myAutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    DependsOn: myLaunchConfiguration
+    Properties:
+      MinSize: "2"
+      MaxSize: "2"
+      LaunchConfigurationName: !Ref LaunchConfigurationName
+      AvailabilityZones: !GetAZs "us-east-2"
+
   myInstanceProfile:
     Type: "AWS::IAM::InstanceProfile"
+    DependsOn: myRole
     Properties:
       Roles:
         - !Ref RoleName
@@ -104,7 +115,7 @@ Resources:
       ServiceName: !Ref ServiceName
       Cluster: !Ref ClusterName
       TaskDefinition: !Ref myTaskDefinition
-      DesiredCount: 1
+      DesiredCount: 2
       LaunchType: EC2
 
   myTaskDefinition:

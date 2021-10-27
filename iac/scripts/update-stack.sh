@@ -14,4 +14,6 @@ ParameterKey=EC2InstanceType,ParameterValue="t2.medium" \
 ParameterKey=ServiceName,ParameterValue="kelly-ecs-service" \
 ParameterKey=RoleName,ParameterValue="kelly-ecs-role" \
 ParameterKey=KeyPairName,ParameterValue="kelly-keypair" \
-ParameterKey=ContainerImage,ParameterValue="kellyedge/web-app:latest"
+ParameterKey=ContainerImage,ParameterValue="kellyedge/web-app:latest" \
+ParameterKey=LaunchConfigurationName,ParameterValue="kelly-launch-config1"
+
