@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 SCRIPT_DIR=$(dirname "$0")
 REGION=us-east-2
 
