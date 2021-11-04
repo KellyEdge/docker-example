@@ -56,6 +56,8 @@ Resources:
       MaxSize: "2"
       LaunchConfigurationName: !Ref LaunchConfigurationName
       AvailabilityZones: !GetAZs "us-east-2"
+      TargetGroupARNs:
+        - !Ref myTargetGroup
 
   myInstanceProfile:
     Type: "AWS::IAM::InstanceProfile"
@@ -100,6 +102,38 @@ Resources:
         - Key: Name
           Value: !Sub "${AWS::StackName}-sg"
 
+  # ALB Configuration
+
+  myALB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Type: "application"
+      Subnets:
+        - "subnet-8852e0e3"
+        - "subnet-ef2b78a3"
+        - "subnet-c87b93b5"
+
+  myALBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    DependsOn:
+      - myALB
+      - myTargetGroup
+    Properties:
+      Port: 80
+      Protocol: "HTTP"
+      LoadBalancerArn: !Ref myALB
+      DefaultActions:
+        - Type: "forward"
+          TargetGroupARN: !Ref myTargetGroup
+
+  myTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: "HTTP"
+      VpcId: "vpc-9fb339f4"
+
+
   # ECS Cluster
 
   myECSCluster:
@@ -111,12 +145,17 @@ Resources:
 
   myContainerService:
     Type: AWS::ECS::Service
+    DependsOn: myALBListener
     Properties:
       ServiceName: !Ref ServiceName
       Cluster: !Ref ClusterName
       TaskDefinition: !Ref myTaskDefinition
       DesiredCount: 2
       LaunchType: EC2
+      LoadBalancers:
+        - TargetGroupARN: !Ref myTargetGroup
+          ContainerName: !Ref ServiceName
+          ContainerPort: 80
 
   myTaskDefinition:
     Type: AWS::ECS::TaskDefinition
