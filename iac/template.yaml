@@ -28,6 +28,36 @@ Parameters:
   LaunchConfigurationName:
     Type: String
 
+  SubnetIds:
+    Type: List<String>
+
+  AutoScalingGroupMinSize:
+    Type: String
+
+  AutoScalingGroupMaxSize:
+    Type: String
+
+  VpcId:
+    Type: String
+
+  ContainerServiceDesiredCount:
+    Type: Number
+
+  ALBListenerPort:
+    Type: Number
+
+  ALBListenerProtocol:
+    Type: String
+
+  ECSHostPort:
+    Type: Number
+
+  ECSContainerPort:
+    Type: Number
+
+  ECSTaskMemory:
+    Type: String
+
 Resources:
 
   # EC2 Instance Configuration
@@ -52,12 +82,11 @@ Resources:
     Type: AWS::AutoScaling::AutoScalingGroup
     DependsOn: myLaunchConfiguration
     Properties:
-      MinSize: "2"
-      MaxSize: "2"
+      MinSize: !Ref AutoScalingGroupMinSize
+      MaxSize: !Ref AutoScalingGroupMaxSize
       LaunchConfigurationName: !Ref LaunchConfigurationName
-      AvailabilityZones: !GetAZs "us-east-2"
-      TargetGroupARNs:
-        - !Ref myTargetGroup
+      AvailabilityZones:
+        Fn::GetAZs: !Ref AWS::Region
 
   myInstanceProfile:
     Type: "AWS::IAM::InstanceProfile"
@@ -95,8 +124,8 @@ Resources:
           CidrIp: 0.0.0.0/0
         - Description: allow incoming http connections
           IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
+          FromPort: !Ref ECSHostPort
+          ToPort: !Ref ECSHostPort
           CidrIp: 0.0.0.0/0
       Tags:
         - Key: Name
@@ -108,10 +137,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
       Type: "application"
-      Subnets:
-        - "subnet-8852e0e3"
-        - "subnet-ef2b78a3"
-        - "subnet-c87b93b5"
+      Subnets: !Ref SubnetIds
 
   myALBListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
@@ -119,8 +145,8 @@ Resources:
       - myALB
       - myTargetGroup
     Properties:
-      Port: 80
-      Protocol: "HTTP"
+      Port: !Ref ALBListenerPort
+      Protocol: !Ref ALBListenerProtocol
       LoadBalancerArn: !Ref myALB
       DefaultActions:
         - Type: "forward"
@@ -129,17 +155,16 @@ Resources:
   myTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      Port: 80
-      Protocol: "HTTP"
-      VpcId: "vpc-9fb339f4"
-
+      Port: !Ref ALBListenerPort
+      Protocol: !Ref ALBListenerProtocol
+      VpcId: !Ref VpcId
 
   # ECS Cluster
 
   myECSCluster:
     Type: AWS::ECS::Cluster
     Properties:
-      ClusterName: !Sub "${ClusterName}"
+      ClusterName: !Ref ClusterName
 
   # ECS Container Service Configuration
 
@@ -150,21 +175,21 @@ Resources:
       ServiceName: !Ref ServiceName
       Cluster: !Ref ClusterName
       TaskDefinition: !Ref myTaskDefinition
-      DesiredCount: 2
+      DesiredCount: !Ref ContainerServiceDesiredCount
       LaunchType: EC2
       LoadBalancers:
         - TargetGroupARN: !Ref myTargetGroup
           ContainerName: !Ref ServiceName
-          ContainerPort: 80
+          ContainerPort: !Ref ECSContainerPort
 
   myTaskDefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
-      Memory: 512
+      Memory: !Ref ECSTaskMemory
       ContainerDefinitions:
         - Name: !Ref ServiceName
           Image: !Ref ContainerImage
           PortMappings:
-            - ContainerPort: 80
-              HostPort: 80
+            - ContainerPort: !Ref ECSContainerPort
+              HostPort: !Ref ECSHostPort
               Protocol: tcp
