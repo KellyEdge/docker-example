@@ -20,7 +20,7 @@ ParameterKey=SubnetIds,ParameterValue="subnet-8852e0e3\, subnet-ef2b78a3\, subne
 ParameterKey=AutoScalingGroupMinSize,ParameterValue="2" \
 ParameterKey=AutoScalingGroupMaxSize,ParameterValue="2" \
 ParameterKey=VpcId,ParameterValue="vpc-9fb339f4" \
-ParameterKey=ContainerServiceDesiredCount,ParameterValue="1" \
+ParameterKey=ContainerServiceDesiredCount,ParameterValue="2" \
 ParameterKey=ALBListenerPort,ParameterValue="80" \
 ParameterKey=ALBListenerProtocol,ParameterValue="HTTP" \
 ParameterKey=ECSHostPort,ParameterValue="80" \

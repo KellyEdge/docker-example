@@ -129,15 +129,18 @@ Resources:
           CidrIp: 0.0.0.0/0
       Tags:
         - Key: Name
-          Value: !Sub "${AWS::StackName}-sg"
+          Value: !Sub "${AWS::StackName} ec2 sg"
 
   # ALB Configuration
 
   myALB:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    DependsOn: myALBSecurityGroup
     Properties:
       Type: "application"
       Subnets: !Ref SubnetIds
+      SecurityGroups:
+        - !Ref myALBSecurityGroup
 
   myALBListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
@@ -158,6 +161,21 @@ Resources:
       Port: !Ref ALBListenerPort
       Protocol: !Ref ALBListenerProtocol
       VpcId: !Ref VpcId
+
+  myALBSecurityGroup:
+      Type: AWS::EC2::SecurityGroup
+      Properties:
+        GroupDescription: !Sub "SG for ${ClusterName} ALB"
+        VpcId: !Ref VpcId
+        SecurityGroupIngress:
+          - Description: allow incoming http connections
+            IpProtocol: tcp
+            FromPort: !Ref ALBListenerPort
+            ToPort: !Ref ALBListenerPort
+            CidrIp: 0.0.0.0/0
+        Tags:
+          - Key: Name
+            Value: !Sub "${AWS::StackName} alb sg"
 
   # ECS Cluster
 
