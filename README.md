@@ -43,7 +43,7 @@ This project contains...
 
 - this project contains a CloudFormation input param configuration file @ *"/iac/cicd-config/prod.json"*
 
-    - an AWS CodePipeline job named *"TODO"* has been manually created in the AWS account (not using CloudFormation)
+    - an AWS CodePipeline job named *"docker-example-cf-deploy"* has been manually created in the AWS account (not using CloudFormation)
     - The CodePipeline job will clone the project repo and apply the CloudFormation template when 
     changes occur on the master branch of this github project repo
 
