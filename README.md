@@ -3,7 +3,7 @@ This project contains...
 - a Web Application
 - a Docker Image
 - a Container Application Hosting Platform 
-- a CICD Deploy Pipeline Configuration
+- a CI/CD Deploy Pipeline Configuration
 
 ### Web Application
 
@@ -39,7 +39,7 @@ This project contains...
     - `/iac/scripts/delete-stack.sh` (delete the existing infrastructure stack in your AWS account)
     - `/iac/scripts/ssh-to-ec2.sh` (modify and use this helpful script if you want to ssh into an aws ec2 instance)
     
-### CICD Deploy Pipeline Configuration
+### CI/CD Deploy Pipeline Configuration
 
 - this project contains a CloudFormation input param configuration file @ *"/iac/cicd-config/prod.json"*
 
