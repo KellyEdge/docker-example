@@ -17,10 +17,10 @@ ParameterKey=KeyPairName,ParameterValue="kelly-keypair" \
 ParameterKey=ContainerImage,ParameterValue="kellyedge/web-app:latest" \
 ParameterKey=LaunchConfigurationName,ParameterValue="kelly-launch-config1" \
 ParameterKey=SubnetIds,ParameterValue="subnet-8852e0e3\, subnet-ef2b78a3\, subnet-c87b93b5" \
-ParameterKey=AutoScalingGroupMinSize,ParameterValue="2" \
-ParameterKey=AutoScalingGroupMaxSize,ParameterValue="2" \
+ParameterKey=AutoScalingGroupMinSize,ParameterValue="4" \
+ParameterKey=AutoScalingGroupMaxSize,ParameterValue="4" \
 ParameterKey=VpcId,ParameterValue="vpc-9fb339f4" \
-ParameterKey=ContainerServiceDesiredCount,ParameterValue="2" \
+ParameterKey=ContainerServiceDesiredCount,ParameterValue="4" \
 ParameterKey=ALBListenerPort,ParameterValue="80" \
 ParameterKey=ALBListenerProtocol,ParameterValue="HTTP" \
 ParameterKey=ECSHostPort,ParameterValue="80" \
