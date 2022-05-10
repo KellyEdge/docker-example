@@ -199,6 +199,9 @@ Resources:
         - TargetGroupARN: !Ref myTargetGroup
           ContainerName: !Ref ServiceName
           ContainerPort: !Ref ECSContainerPort
+      DeploymentConfiguration:
+        MinimumHealthyPercent: 0
+        MaximumPercent: 100
 
   myTaskDefinition:
     Type: AWS::ECS::TaskDefinition
