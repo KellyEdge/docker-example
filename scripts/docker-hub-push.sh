@@ -1,5 +1,7 @@
 #!/bin/bash
 
+TAG=${1:-latest}
+
 # docker login command -> https://docs.docker.com/engine/reference/commandline/login/
 docker login --username=kellyedge
 
@@ -8,4 +10,4 @@ docker login --username=kellyedge
 # docker tag web-app kellyedge/web-app
 
 # docker push command -> https://docs.docker.com/engine/reference/commandline/push/
-docker push kellyedge/web-app
+docker push kellyedge/web-app:$TAG
