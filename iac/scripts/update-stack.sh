@@ -14,7 +14,7 @@ ParameterKey=EC2InstanceType,ParameterValue="t2.medium" \
 ParameterKey=ServiceName,ParameterValue="kelly-ecs-service" \
 ParameterKey=RoleName,ParameterValue="kelly-ecs-role" \
 ParameterKey=KeyPairName,ParameterValue="kelly-keypair" \
-ParameterKey=ContainerImage,ParameterValue="kellyedge/web-app:v1" \
+ParameterKey=ContainerImage,ParameterValue="kellyedge/web-app:v7" \
 ParameterKey=LaunchConfigurationName,ParameterValue="kelly-launch-config1" \
 ParameterKey=SubnetIds,ParameterValue="subnet-8852e0e3\, subnet-ef2b78a3\, subnet-c87b93b5" \
 ParameterKey=AutoScalingGroupMinSize,ParameterValue="2" \
