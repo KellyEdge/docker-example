@@ -6,7 +6,7 @@
     "ServiceName" : "kelly-ecs-service",
     "RoleName" : "kelly-ecs-role",
     "KeyPairName" : "kelly-keypair",
-    "ContainerImage" : "kellyedge/web-app:v7",
+    "ContainerImage" : "kellyedge/web-app:v9",
     "LaunchConfigurationName" : "kelly-launch-config1",
     "SubnetIds" : "subnet-8852e0e3, subnet-ef2b78a3, subnet-c87b93b5",
     "AutoScalingGroupMinSize" : "2",
